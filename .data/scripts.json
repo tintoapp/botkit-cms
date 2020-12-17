@@ -1,0 +1,179 @@
+[
+  {
+    "id": "hello",
+    "command": "hello",
+    "description": "Respond when a human says hello!",
+    "script": [
+      {
+        "topic": "default",
+        "script": [
+          {
+            "text": [
+              "Hello Human!",
+              "How do you do?",
+              "Nice to meet you Human.",
+              "Hi!",
+              "How’s it going?",
+              "Hey!",
+              "Hey there!",
+              "Howdy!",
+              "G`day human!",
+              "Salut!",
+              "Ciao!",
+              "Hola!",
+              "Shalom!"
+            ],
+            "quick_replies": [
+              {
+                "title": "Just checking in",
+                "payload": "just checking in",
+                "content_type": "text"
+              },
+              {
+                "title": "I need help",
+                "payload": "i need help",
+                "content_type": "text"
+              }
+            ],
+            "collect": {
+              "key": "temporary_value",
+              "options": [
+                {
+                  "default": true,
+                  "pattern": "default",
+                  "action": "next"
+                },
+                {
+                  "pattern": "just checking in",
+                  "type": "string",
+                  "action": "just checking in"
+                }
+              ]
+            }
+          },
+          {
+            "text": [
+              "Ok, how can I help, what's the problem?",
+              "Ok, let's see if I can help, what's the problem?",
+              "How can I help?",
+              "What do you need help with?"
+            ],
+            "meta": [],
+            "collect": {
+              "key": "temporary_value",
+              "options": [
+                {
+                  "default": true,
+                  "pattern": "default",
+                  "action": "next"
+                },
+                {
+                  "pattern": ".*pelvic floor.*",
+                  "type": "regex",
+                  "action": "pelvic floor"
+                },
+                {
+                  "pattern": ".*sleep.*",
+                  "type": "regex",
+                  "action": "sleep training"
+                }
+              ]
+            }
+          },
+          {
+            "text": [
+              "Sorry, I don't know how to help with that yet. Would you like to ask the Tintohood?"
+            ],
+            "collect": {
+              "key": "temporary_value",
+              "options": [
+                {
+                  "default": true,
+                  "pattern": "default",
+                  "action": "next"
+                }
+              ]
+            }
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      },
+      {
+        "topic": "just checking in",
+        "script": [
+          {
+            "text": [
+              "Aww, thanks for checking in",
+              "Aww, that's sweet. I am all good thanks.",
+              "I'm great, thanks for checking in",
+              "That's a little weird, I am a robot"
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      },
+      {
+        "topic": "pelvic floor",
+        "script": [
+          {
+            "text": [
+              "Coming soon"
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      },
+      {
+        "topic": "sleep training",
+        "script": [
+          {
+            "text": [
+              "Coming soon"
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      }
+    ],
+    "triggers": [
+      {
+        "pattern": "hell.*",
+        "type": "regexp",
+        "id": "495"
+      },
+      {
+        "type": "string",
+        "pattern": "hello"
+      },
+      {
+        "type": "string",
+        "pattern": "hey"
+      },
+      {
+        "type": "string",
+        "pattern": "hi"
+      },
+      {
+        "type": "string",
+        "pattern": "howdy"
+      }
+    ],
+    "variables": [
+      {
+        "name": "temporary_value",
+        "type": "string",
+        "id": 278
+      }
+    ],
+    "modified": "2020-12-17T18:34:11.739Z",
+    "name": "hello"
+  }
+]
