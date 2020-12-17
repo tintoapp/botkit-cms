@@ -22,6 +22,7 @@
     "url": "https://github.com/howdyai/botkit-cms/issues"
   },
   "scripts": {
+    "heroku-prebuild": "yarn build",
     "start": "node index.js",
     "build": "./node_modules/gulp/bin/gulp.js",
     "gulp": "./node_modules/gulp/bin/gulp.js",
