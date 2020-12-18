@@ -70,7 +70,11 @@
                 {
                   "pattern": ".*pelvic floor.*",
                   "type": "regex",
-                  "action": "pelvic floor"
+                  "action": "execute_script",
+                  "execute": {
+                    "script": "pelvic-floor-assessment",
+                    "thread": "default"
+                  }
                 },
                 {
                   "pattern": ".*sleep.*",
@@ -109,19 +113,6 @@
               "Aww, that's sweet. I am all good thanks.",
               "I'm great, thanks for checking in",
               "That's a little weird, I am a robot"
-            ]
-          },
-          {
-            "action": "complete"
-          }
-        ]
-      },
-      {
-        "topic": "pelvic floor",
-        "script": [
-          {
-            "text": [
-              "Coming soon"
             ]
           },
           {
@@ -173,7 +164,381 @@
         "id": 278
       }
     ],
-    "modified": "2020-12-17T18:34:11.739Z",
+    "modified": "2020-12-17T22:49:13.830Z",
     "name": "hello"
+  },
+  {
+    "command": "pelvic-floor-assessment",
+    "botId": 1,
+    "description": "An initial assessment of a woman's pelvic floor concerns",
+    "triggers": [
+      {
+        "type": "string",
+        "pattern": "pelvic-floor-assessment"
+      }
+    ],
+    "variables": [
+      {
+        "name": "is_pregnant",
+        "type": "string",
+        "id": 458
+      },
+      {
+        "name": "affecting_activities",
+        "type": "string",
+        "id": 474
+      },
+      {
+        "name": "affecting_mood",
+        "type": "string",
+        "id": 162
+      },
+      {
+        "name": "concerns",
+        "type": "string",
+        "id": 12
+      },
+      {
+        "name": "mode_of_delivery",
+        "type": "string",
+        "id": 453
+      },
+      {
+        "name": "number_of_children",
+        "type": "string",
+        "id": 309
+      },
+      {
+        "name": "weeks_pregnant",
+        "type": "string",
+        "id": 447
+      },
+      {
+        "name": "has_children",
+        "type": "string",
+        "id": 314
+      },
+      {
+        "name": "temporary_value",
+        "type": "string",
+        "id": 500
+      }
+    ],
+    "script": [
+      {
+        "topic": "default",
+        "script": [
+          {
+            "text": [
+              "Ok, I am going to ask you a few questions."
+            ]
+          },
+          {
+            "action": "pregnancy",
+            "selected_scripts_threads": [
+              {
+                "topic": "default",
+                "script": [
+                  {
+                    "text": [
+                      "This is the pelvic-floor-assessment script. Customize me!"
+                    ]
+                  },
+                  {
+                    "action": "complete"
+                  }
+                ]
+              },
+              {
+                "topic": "on_timeout",
+                "script": [
+                  {
+                    "text": [
+                      "Looks like you got distracted. We can continue later."
+                    ]
+                  },
+                  {
+                    "action": "timeout"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "topic": "pregnancy",
+        "script": [
+          {
+            "text": [
+              "Are you pregnant currently?"
+            ],
+            "quick_replies": [
+              {
+                "title": "Yes",
+                "payload": "yes",
+                "content_type": "text"
+              },
+              {
+                "title": "No",
+                "payload": "no",
+                "content_type": "text"
+              }
+            ],
+            "collect": {
+              "key": "is_pregnant",
+              "options": [
+                {
+                  "default": true,
+                  "pattern": "default",
+                  "action": "next"
+                },
+                {
+                  "pattern": "no",
+                  "type": "string",
+                  "action": "do you have children"
+                }
+              ]
+            }
+          },
+          {
+            "text": [
+              "How many weeks are you?"
+            ],
+            "quick_replies": [
+              {
+                "title": "0 - 13",
+                "payload": "first",
+                "content_type": "text"
+              },
+              {
+                "title": "14 -27",
+                "payload": "second",
+                "content_type": "text"
+              },
+              {
+                "title": "27+",
+                "payload": "third",
+                "content_type": "text"
+              }
+            ],
+            "collect": {
+              "key": "weeks_pregnant",
+              "options": [
+                {
+                  "default": true,
+                  "pattern": "default",
+                  "action": "next"
+                }
+              ]
+            }
+          },
+          {
+            "action": "do you have children"
+          }
+        ]
+      },
+      {
+        "topic": "do you have children",
+        "script": [
+          {
+            "text": [
+              "Do you have any children?"
+            ],
+            "quick_replies": [
+              {
+                "title": "Yes",
+                "payload": "yes",
+                "content_type": "text"
+              },
+              {
+                "title": "No",
+                "payload": "no",
+                "content_type": "text"
+              }
+            ],
+            "collect": {
+              "key": "has_children",
+              "options": [
+                {
+                  "default": true,
+                  "pattern": "default",
+                  "action": "next"
+                }
+              ]
+            }
+          },
+          {
+            "text": [
+              "How many children do you have?"
+            ],
+            "collect": {
+              "key": "number_of_children",
+              "options": [
+                {
+                  "default": true,
+                  "pattern": "default",
+                  "action": "repeat"
+                },
+                {
+                  "pattern": "^\\d+$",
+                  "type": "regex",
+                  "action": "next"
+                }
+              ]
+            }
+          },
+          {
+            "text": [
+              "What mode of delivery did you have?"
+            ],
+            "collect": {
+              "key": "mode_of_delivery",
+              "options": [
+                {
+                  "default": true,
+                  "pattern": "default",
+                  "action": "next"
+                }
+              ]
+            }
+          },
+          {
+            "action": "concerns do you have"
+          }
+        ]
+      },
+      {
+        "topic": "concerns do you have",
+        "script": [
+          {
+            "text": [
+              "What concerns do you have?"
+            ],
+            "collect": {
+              "key": "concerns",
+              "options": [
+                {
+                  "default": true,
+                  "pattern": "default",
+                  "action": "next"
+                }
+              ],
+              "multiple": false
+            },
+            "meta": []
+          },
+          {
+            "text": [
+              "How much is this affecting your mood?"
+            ],
+            "collect": {
+              "key": "affecting_mood",
+              "options": [
+                {
+                  "default": true,
+                  "pattern": "default",
+                  "action": "next"
+                },
+                {
+                  "pattern": "i-can-cope",
+                  "type": "string",
+                  "action": "outcome"
+                },
+                {
+                  "pattern": "always-like-this",
+                  "type": "string",
+                  "action": "outcome"
+                }
+              ]
+            },
+            "quick_replies": [
+              {
+                "title": "I feel like it is really affecting it, it is affecting everything",
+                "payload": "affecting-everything",
+                "content_type": "text"
+              },
+              {
+                "title": "It is significantly worse than before but I am still able to get on with things",
+                "payload": "get-on-with-things",
+                "content_type": "text"
+              },
+              {
+                "title": "It is worse but I feel like I can cope",
+                "payload": "i-can-cope",
+                "content_type": "text"
+              },
+              {
+                "title": "It has always been like this",
+                "payload": "always-like-this",
+                "content_type": "text"
+              }
+            ]
+          },
+          {
+            "text": [
+              "How is this affecting your every day activities like washing, dressing, sleeping, exercise etc?"
+            ],
+            "collect": {
+              "key": "affecting_activities",
+              "options": [
+                {
+                  "default": true,
+                  "pattern": "default",
+                  "action": "next"
+                }
+              ]
+            },
+            "quick_replies": [
+              {
+                "title": "I feel like it is really affecting it, it is affecting everything",
+                "payload": "affecting-everything",
+                "content_type": "text"
+              },
+              {
+                "title": "It is significantly worse than before but I am still able to get on with things",
+                "payload": "get-on-with-things",
+                "content_type": "text"
+              },
+              {
+                "title": "It is worse but I feel like I can cope",
+                "payload": "i-can-cope",
+                "content_type": "text"
+              }
+            ]
+          },
+          {
+            "action": "outcome"
+          }
+        ]
+      },
+      {
+        "topic": "outcome",
+        "script": [
+          {
+            "text": [
+              "Thinking..."
+            ],
+            "meta": [
+              {
+                "key": "completed",
+                "value": "true"
+              }
+            ]
+          },
+          {
+            "text": [
+              "Ok, here is what we think"
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      }
+    ],
+    "id": "78ec2a80-58d3-4f79-a5d2-9d55fc53c2cc",
+    "modified": "2020-12-17T23:34:33.584Z",
+    "name": "pelvic-floor-assessment"
   }
 ]
